@@ -161,7 +161,7 @@ namespace lab4_linq
             {
                 Console.WriteLine(x.Key);
                 foreach(var z in x.Values)
-                    Console.WriteLine("     " + z.PIB + "     " + z.Organisation);
+                    Console.WriteLine("     " + z.PIB);
             }
             Console.WriteLine(new string('-', 100));
 

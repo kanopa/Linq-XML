@@ -32,12 +32,36 @@ namespace LinqToXml
                         Console.ReadKey();
                         break;
                     case "2":
-                        XDocument xDocument = XDocument.Load("teams.xml");
-                        operationsXml.OutputXml(xDocument);
+                        try
+                        {
+                            operationsXml.OutputXml(document);
+                        }
+                        catch
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Файл не создан\nЗагружаем существующий");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                            XDocument xDocument = XDocument.Load("teams.xml");
+                            operationsXml.OutputXml(xDocument);
+                        }
                         Console.ReadKey();
                         break;
                     case "3":
-                        operationsXml.LinqXml(document);
+                        try
+                        {
+                            operationsXml.LinqXml(document);
+                        }
+                        catch
+                        {
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Файл не создан\nЗагружаем существующий");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                            XDocument xDocument = XDocument.Load("teams.xml");
+                            operationsXml.LinqXml(xDocument);
+                        }
                         Console.ReadKey();
                         break;
                     case "4":
