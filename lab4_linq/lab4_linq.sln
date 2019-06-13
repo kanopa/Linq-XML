@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab4_linq", "lab4_linq\lab4_linq.csproj", "{154A0B22-F4DB-4813-B46C-2987A3CF9EED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqToXml", "LinqToXml\LinqToXml.csproj", "{24946929-D578-4983-A5CC-1749DB4FA7CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{154A0B22-F4DB-4813-B46C-2987A3CF9EED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{154A0B22-F4DB-4813-B46C-2987A3CF9EED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{154A0B22-F4DB-4813-B46C-2987A3CF9EED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24946929-D578-4983-A5CC-1749DB4FA7CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24946929-D578-4983-A5CC-1749DB4FA7CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24946929-D578-4983-A5CC-1749DB4FA7CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24946929-D578-4983-A5CC-1749DB4FA7CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
