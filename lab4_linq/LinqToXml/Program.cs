@@ -12,7 +12,52 @@ namespace LinqToXml
         static void Main(string[] args)
         {
             XDocument document = new XDocument();
+            OperationsXml operationsXml = new OperationsXml();
+            bool flag = true;
+            string key;
 
+            while(flag)
+            {
+                Console.WriteLine("1. Создать xml документ");
+                Console.WriteLine("2. Вывести xml документ на экран");
+                Console.WriteLine("3. Linq to xml");
+                Console.WriteLine("4. Выход\n");
+                Console.WriteLine("Ввод: ");
+                key = Console.ReadLine();
+                Console.Clear();
+                switch (key)
+                {
+                    case "1":
+                        operationsXml.CreateXml(document);
+                        Console.ReadKey();
+                        break;
+                    case "2":
+                        XDocument xDocument = XDocument.Load("teams.xml");
+                        operationsXml.OutputXml(xDocument);
+                        Console.ReadKey();
+                        break;
+                    case "3":
+                        operationsXml.LinqXml(document);
+                        Console.ReadKey();
+                        break;
+                    case "4":
+                        flag = false;
+                        break;
+                    default :
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Неккоректный ввод");
+                        Console.ResetColor();
+                        Console.ReadKey();
+                        break;
+                }
+                Console.Clear();
+            }
+        }
+    }
+    class OperationsXml
+    {
+        public void CreateXml(XDocument document)
+        {
             XElement TeamElement = new XElement("teams");
             XElement TeamElement1 = new XElement("team");
             XElement TeamElement2 = new XElement("team");
@@ -85,9 +130,10 @@ namespace LinqToXml
             document.Add(TeamElement);
 
             document.Save("teams.xml");
-            //Console.WriteLine(document);
-
-            foreach(XElement ElementTeam in document.Element("teams").Elements("team"))
+        }
+        public void OutputXml(XDocument document)
+        {
+            foreach (XElement ElementTeam in document.Element("teams").Elements("team"))
             {
                 XAttribute TeamAttributeOutput = ElementTeam.Attribute("team");
                 foreach (XElement AllElements in document.Element("teams").Element("team").Elements("player"))
@@ -97,7 +143,7 @@ namespace LinqToXml
                     XElement WeightElementOutput2 = AllElements.Element("height");
                     XElement WeightElementOutput3 = AllElements.Element("wage");
 
-                    if(TeamAttributeOutput != null && WeightElementOutput1 != null && WeightElementOutput2 != null && WeightElementOutput3 != null)
+                    if (TeamAttributeOutput != null && WeightElementOutput1 != null && WeightElementOutput2 != null && WeightElementOutput3 != null)
                     {
                         Console.WriteLine(new string('-', 100));
                         Console.WriteLine("Команда: {0}", TeamAttributeOutput.Value);
@@ -110,14 +156,16 @@ namespace LinqToXml
                 }
                 Console.WriteLine();
             }
-
+        }
+        public void LinqXml(XDocument document)
+        {
             Console.WriteLine("Выборка отдельного элемента");
             Console.WriteLine(new string('-', 100));
             var q1 = from file in document.Element("teams").Elements("team")
                          //where file.Element("weight").Value == "104"
                      select file;
 
-            foreach(var item in q1)
+            foreach (var item in q1)
                 Console.WriteLine(item.Attribute("team"));
 
             Console.WriteLine("Простая выборка элементов");
@@ -125,17 +173,17 @@ namespace LinqToXml
             var q2 = from file in document.Element("teams").Element("team").Elements("player")
                      select file;
 
-            foreach(var item in q2)
-                Console.WriteLine("Имя игрока: {0}\nВес: {1}\nРост: {2}\nЗароботная плата: {3}\n", item.Attribute("name").Value,item.Element("weight").Value,
-                    item.Element("height").Value,item.Element("wage").Value);
+            foreach (var item in q2)
+                Console.WriteLine("Имя игрока: {0}\nВес: {1}\nРост: {2}\nЗароботная плата: {3}\n", item.Attribute("name").Value, item.Element("weight").Value,
+                    item.Element("height").Value, item.Element("wage").Value);
 
             Console.WriteLine("Условия");
             var q3 = from file in document.Element("teams").Element("team").Elements("player")
-                     where file.Element("weight").Value  == "104" || file.Element("weight").Value == "89"
+                     where file.Element("weight").Value == "104" || file.Element("weight").Value == "89"
                      select file;
 
-            Console.WriteLine(new string('-',100));
-            foreach(var item in q3)
+            Console.WriteLine(new string('-', 100));
+            foreach (var item in q3)
                 Console.WriteLine("Имя игрока: {0}\nВес: {1}\nРост: {2}\nЗароботная плата: {3}\n", item.Attribute("name").Value, item.Element("weight").Value,
                     item.Element("height").Value, item.Element("wage").Value);
 
@@ -145,7 +193,7 @@ namespace LinqToXml
                      orderby file.Element("height").Value
                      select file;
 
-            foreach(var item in q4)
+            foreach (var item in q4)
                 Console.WriteLine("Имя игрока: {0}\nВес: {1}\nРост: {2}\nЗароботная плата: {3}\n", item.Attribute("name").Value, item.Element("weight").Value,
                     item.Element("height").Value, item.Element("wage").Value);
 
@@ -162,7 +210,7 @@ namespace LinqToXml
 
             Console.WriteLine("Количество игроков");
             Console.WriteLine(new string('-', 100));
-            Console.WriteLine("Количество игроков: {0}",document.Element("teams").Element("team").Elements("player").Count());
+            Console.WriteLine("Количество игроков: {0}", document.Element("teams").Element("team").Elements("player").Count());
         }
     }
 }
