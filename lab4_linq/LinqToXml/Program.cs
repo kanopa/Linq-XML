@@ -21,14 +21,22 @@ namespace LinqToXml
                 Console.WriteLine("1. Создать xml документ");
                 Console.WriteLine("2. Вывести xml документ на экран");
                 Console.WriteLine("3. Linq to xml");
-                Console.WriteLine("4. Выход\n");
+                Console.WriteLine("4. Изменить xml файл");
+                Console.WriteLine("5. Выход\n");
                 Console.WriteLine("Ввод: ");
                 key = Console.ReadLine();
                 Console.Clear();
                 switch (key)
                 {
                     case "1":
-                        operationsXml.CreateXml(document);
+                        try
+                        {
+                            operationsXml.CreateXml(document);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Нельзя пересоздать файл, нарушится структура");
+                        }
                         Console.ReadKey();
                         break;
                     case "2":
@@ -65,6 +73,26 @@ namespace LinqToXml
                         Console.ReadKey();
                         break;
                     case "4":
+                        string temp;
+                        Console.WriteLine("Введите значение с файла");
+                        temp = Console.ReadLine();
+                        try
+                        {
+                            operationsXml.UpdateXml(document,temp);
+                        }
+                        catch
+                        {
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Файл не создан\nЗагружаем существующий");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                            XDocument xDocument = XDocument.Load("teams.xml");
+                            operationsXml.UpdateXml(xDocument,temp);
+                        }
+                        Console.ReadKey();
+                        break;
+                    case "5":
                         flag = false;
                         break;
                     default :
@@ -107,7 +135,7 @@ namespace LinqToXml
 
             XElement PlayerWeight1 = new XElement("weight", "104");
             XElement PlayerWeight2 = new XElement("weight", "89");
-            XElement PlayerWeight3 = new XElement("weight", "89");
+            XElement PlayerWeight3 = new XElement("weight", "88");
             XElement PlayerWeight4 = new XElement("weight", "116");
             XElement PlayerWeight5 = new XElement("weight", "91");
 
@@ -235,6 +263,37 @@ namespace LinqToXml
             Console.WriteLine("Количество игроков");
             Console.WriteLine(new string('-', 100));
             Console.WriteLine("Количество игроков: {0}", document.Element("teams").Element("team").Elements("player").Count());
+        }
+        public void UpdateXml(XDocument document, string temp)
+        {
+            foreach (XElement AllElements in document.Element("teams").Element("team").Elements("player"))
+            {
+                if (AllElements.Attribute("name").Value == temp)
+                {
+                    Console.WriteLine("Новое имя игрока: ");
+                    temp = Console.ReadLine();
+                    AllElements.Attribute("name").Value = temp;
+                }
+                else if(AllElements.Element("weight").Value == temp)
+                {
+                    Console.WriteLine("Новый вес игрока: ");
+                    temp = Console.ReadLine();
+                    AllElements.Element("weight").Value = temp;
+                }
+                else if(AllElements.Element("height").Value == temp)
+                {
+                    Console.WriteLine("Новый рост игрока: ");
+                    temp = Console.ReadLine();
+                    AllElements.Element("height").Value = temp;
+                }
+                else if(AllElements.Element("wage").Value == temp)
+                {
+                    Console.WriteLine("Новая зароботная плата игрока: ");
+                    temp = Console.ReadLine();
+                    AllElements.Element("wage").Value = temp;
+                }
+            }
+            document.Save("teams.xml");
         }
     }
 }
