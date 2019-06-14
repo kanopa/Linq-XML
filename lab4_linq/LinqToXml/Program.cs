@@ -22,7 +22,9 @@ namespace LinqToXml
                 Console.WriteLine("2. Вывести xml документ на экран");
                 Console.WriteLine("3. Linq to xml");
                 Console.WriteLine("4. Изменить xml файл");
-                Console.WriteLine("5. Выход\n");
+                Console.WriteLine("5. Удалить элемент");
+                Console.WriteLine("6. Добавить элемент в файл");
+                Console.WriteLine("7. Выход\n");
                 Console.WriteLine("Ввод: ");
                 key = Console.ReadLine();
                 Console.Clear();
@@ -46,10 +48,7 @@ namespace LinqToXml
                         }
                         catch
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Файл не создан\nЗагружаем существующий");
-                            Console.ResetColor();
-                            Console.ReadKey();
+                            operationsXml.AddOutput();
                             XDocument xDocument = XDocument.Load("teams.xml");
                             operationsXml.OutputXml(xDocument);
                         }
@@ -62,11 +61,7 @@ namespace LinqToXml
                         }
                         catch
                         {
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Файл не создан\nЗагружаем существующий");
-                            Console.ResetColor();
-                            Console.ReadKey();
+                            operationsXml.AddOutput();
                             XDocument xDocument = XDocument.Load("teams.xml");
                             operationsXml.LinqXml(xDocument);
                         }
@@ -82,24 +77,55 @@ namespace LinqToXml
                         }
                         catch
                         {
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Файл не создан\nЗагружаем существующий");
-                            Console.ResetColor();
-                            Console.ReadKey();
+                            operationsXml.AddOutput();
                             XDocument xDocument = XDocument.Load("teams.xml");
                             operationsXml.UpdateXml(xDocument,temp);
                         }
                         Console.ReadKey();
                         break;
                     case "5":
+                        string temp1;
+                        Console.WriteLine("Введите значение с файла");
+                        temp1 = Console.ReadLine();
+                        try
+                        {
+                            operationsXml.DeleteXml(document, temp1);
+                        }
+                        catch
+                        {
+                            operationsXml.AddOutput();
+                            XDocument xDocument = XDocument.Load("teams.xml");
+                            operationsXml.DeleteXml(xDocument, temp1);
+                        }
+                        Console.ReadKey();
+                        break;
+                    case "6":
+                        string name, weight, height, wage;
+                        Console.WriteLine("Введите имя нового игрока");
+                        name = Console.ReadLine();
+                        Console.WriteLine("Введите вес нового игрока: ");
+                        weight = Console.ReadLine();
+                        Console.WriteLine("Введите рост нового игрока");
+                        height = Console.ReadLine();
+                        Console.WriteLine("Введите зароботную плату");
+                        wage = Console.ReadLine();
+                        try
+                        {
+                            operationsXml.AddXml(document, name, weight, height, wage);
+                        }
+                        catch
+                        {
+                            operationsXml.AddOutput();
+                            XDocument xDocument = XDocument.Load("teams.xml");
+                            operationsXml.AddXml(xDocument, name, weight, height, wage);
+                        }
+                        Console.ReadKey();
+                        break;
+                    case "7":
                         flag = false;
                         break;
                     default :
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Неккоректный ввод");
-                        Console.ResetColor();
-                        Console.ReadKey();
+                        operationsXml.AddOutput();
                         break;
                 }
                 Console.Clear();
@@ -294,6 +320,54 @@ namespace LinqToXml
                 }
             }
             document.Save("teams.xml");
+        }
+        public void DeleteXml(XDocument document, string temp1)
+        {
+            foreach (XElement AllElements in document.Element("teams").Element("team").Elements("player"))
+            {
+                if (AllElements.Attribute("name").Value == temp1)
+                {
+                    AllElements.Remove();
+                }
+                else if (AllElements.Element("weight").Value == temp1)
+                {
+                    AllElements.Remove();
+                }
+                else if (AllElements.Element("height").Value == temp1)
+                {
+                    AllElements.Remove();
+                }
+                else if (AllElements.Element("wage").Value == temp1)
+                {
+                    AllElements.Remove();
+                }
+            }
+            document.Save("teams.xml");
+        }
+        public void AddXml(XDocument document,string name, string weight, string height, string wage)
+        {
+            XElement root = document.Element("teams").Element("team");
+            XElement PlayerElement5 = new XElement("player");
+            XAttribute NameAttribute5 = new XAttribute("name", name);
+            XElement PlayerWeight5 = new XElement("weight", weight);
+            XElement PlayerHeight5 = new XElement("height", height);
+            XElement PlayerWage5 = new XElement("wage", wage);
+
+            PlayerElement5.Add(NameAttribute5);
+            PlayerElement5.Add(PlayerWeight5);
+            PlayerElement5.Add(PlayerHeight5);
+            PlayerElement5.Add(PlayerWage5);
+
+            root.Add(PlayerElement5);
+
+            document.Save("teams.xml");
+        }
+        public void AddOutput()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Файл не создан\nЗагружаем существующий");
+            Console.ResetColor();
+            Console.ReadKey();
         }
     }
 }
